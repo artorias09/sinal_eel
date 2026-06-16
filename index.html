@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Alerta de Alagamentos — Lorena/SP</title>
+  <meta name="description" content="Modelo probabilístico para estimar risco de enchente fluvial e alagamento urbano por bairro em Lorena/SP.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <header class="site-header" id="site-header">
+    <div class="header-inner">
+      <a href="#hero" class="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 16c1.5-2 3-2 4.5 0s3 2 4.5 0 3-2 4.5 0 3 2 4.5 0"/><path d="M2 20c1.5-2 3-2 4.5 0s3 2 4.5 0 3-2 4.5 0 3 2 4.5 0"/><path d="M12 3v8"/><path d="M9 7l3-3 3 3"/></svg>
+        </span>
+        <span class="brand-text">Alerta&nbsp;Lorena</span>
+      </a>
+
+      <nav class="main-nav" id="main-nav">
+        <a href="#como-funciona">Como funciona</a>
+        <a href="#tipos-evento">Tipos de evento</a>
+        <a href="#bairros">Bairros</a>
+      </nav>
+
+      <a class="btn btn-primary btn-nav" href="LINK_DO_STREAMLIT" target="_blank" rel="noopener">Acessar protótipo</a>
+
+      <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" id="hero">
+    <div class="hero-bg" aria-hidden="true">
+      <svg class="hydrograph" viewBox="0 0 1200 300" preserveAspectRatio="none">
+        <path class="hydrograph-fill" d="M0,220 C100,200 180,150 260,160 C360,175 420,90 520,80 C620,70 680,180 780,190 C900,205 980,140 1080,130 C1140,124 1170,150 1200,160 L1200,300 L0,300 Z"/>
+        <path class="hydrograph-line" d="M0,220 C100,200 180,150 260,160 C360,175 420,90 520,80 C620,70 680,180 780,190 C900,205 980,140 1080,130 C1140,124 1170,150 1200,160"/>
+      </svg>
+    </div>
+
+    <div class="hero-content">
+      <p class="eyebrow">Bacia do Rio Paraíba do Sul · Lorena/SP</p>
+      <h1>Sistema de Alerta de<br>Alagamentos, Lorena/SP</h1>
+      <p class="hero-subtitle">Modelo probabilístico para estimar risco de enchente fluvial e alagamento urbano por bairro.</p>
+
+      <div class="hero-actions">
+        <a class="btn btn-primary btn-large" href="LINK_DO_STREAMLIT" target="_blank" rel="noopener">
+          Acessar protótipo
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 5l7 7-7 7"/></svg>
+        </a>
+        <a class="btn btn-ghost" href="#como-funciona">Ver como funciona</a>
+      </div>
+
+      <ul class="data-sources" aria-label="Fontes de dados utilizadas">
+        <li><span>ANA HidroWeb</span> 58174000</li>
+        <li><span>INMET</span> A756</li>
+        <li><span>Open-Meteo</span> dados horários</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===== COMO FUNCIONA ===== -->
+  <section class="section" id="como-funciona">
+    <div class="section-inner">
+      <p class="eyebrow eyebrow-dark">Pipeline do sistema</p>
+      <h2>Como funciona</h2>
+      <p class="section-lead">Da coleta de dados ambientais até o alerta enviado ao morador, o sistema segue um fluxo contínuo de quatro etapas.</p>
+
+      <div class="flow">
+        <div class="step-card">
+          <span class="step-index">01</span>
+          <span class="step-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18a4.5 4.5 0 0 1-.5-8.97A5.5 5.5 0 0 1 17 8.5a3.5 3.5 0 0 1 .5 6.96"/><path d="M9 21l1-2"/><path d="M13 21l1-2"/><path d="M17 21l-1-2"/></svg>
+          </span>
+          <h3>Dados ambientais</h3>
+          <p>Chuva, nível do rio e umidade coletados em série horária junto a Open-Meteo, ANA e INMET.</p>
+        </div>
+
+        <span class="flow-arrow" aria-hidden="true">
+          <svg width="28" height="16" viewBox="0 0 28 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 8h24"/><path d="M19 2l6 6-6 6"/></svg>
+        </span>
+
+        <div class="step-card">
+          <span class="step-index">02</span>
+          <span class="step-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="6" width="12" height="12" rx="1.5"/><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"/></svg>
+          </span>
+          <h3>Modelo probabilístico</h3>
+          <p>Regressão logística treinada com séries históricas estima a probabilidade de cada tipo de evento.</p>
+        </div>
+
+        <span class="flow-arrow" aria-hidden="true">
+          <svg width="28" height="16" viewBox="0 0 28 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 8h24"/><path d="M19 2l6 6-6 6"/></svg>
+        </span>
+
+        <div class="step-card">
+          <span class="step-index">03</span>
+          <span class="step-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z"/><path d="M12 12l4-4"/><path d="M12 12l-2 2"/></svg>
+          </span>
+          <h3>Estimativa de risco</h3>
+          <p>O risco é calculado por bairro, em quase tempo real, separando enchente fluvial de alagamento urbano.</p>
+        </div>
+
+        <span class="flow-arrow" aria-hidden="true">
+          <svg width="28" height="16" viewBox="0 0 28 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 8h24"/><path d="M19 2l6 6-6 6"/></svg>
+        </span>
+
+        <div class="step-card">
+          <span class="step-index">04</span>
+          <span class="step-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          </span>
+          <h3>Alerta</h3>
+          <p>Quando o risco supera o limiar definido, moradores e gestores recebem aviso automático via Telegram.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TIPOS DE EVENTO ===== -->
+  <section class="section section-alt" id="tipos-evento">
+    <div class="section-inner">
+      <p class="eyebrow eyebrow-dark">Dois fenômenos, um sistema</p>
+      <h2>Tipos de evento</h2>
+      <p class="section-lead">O modelo distingue dois mecanismos diferentes de inundação, cada um com causas e sinais próprios.</p>
+
+      <div class="event-grid">
+        <article class="event-card event-card--river">
+          <span class="event-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 11c1.5-1.5 3-1.5 4.5 0s3 1.5 4.5 0 3-1.5 4.5 0 3 1.5 4.5 0"/><path d="M2 16c1.5-1.5 3-1.5 4.5 0s3 1.5 4.5 0 3-1.5 4.5 0 3 1.5 4.5 0"/><path d="M5 11V6a2 2 0 0 1 2-2h2"/></svg>
+          </span>
+          <h3>Enchente fluvial</h3>
+          <ul class="event-list">
+            <li>Rio Paraíba do Sul acima da cota de alerta</li>
+            <li>Transbordamento da calha principal</li>
+            <li>Efeito de remanso em afluentes e córregos</li>
+          </ul>
+        </article>
+
+        <article class="event-card event-card--urban">
+          <span class="event-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c3 4 6 7.5 6 11a6 6 0 0 1-12 0c0-3.5 3-7 6-11Z"/><path d="M9 16h6"/></svg>
+          </span>
+          <h3>Alagamento urbano</h3>
+          <ul class="event-list">
+            <li>Chuva intensa concentrada em curto período</li>
+            <li>Drenagem pluvial com capacidade insuficiente</li>
+            <li>Acúmulo em pontos baixos, independente do rio</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== BAIRROS MONITORADOS ===== -->
+  <section class="section" id="bairros">
+    <div class="section-inner">
+      <p class="eyebrow eyebrow-dark">Cobertura atual</p>
+      <h2>Bairros monitorados</h2>
+      <p class="section-lead">O protótipo estima risco individualmente para cada um dos bairros abaixo.</p>
+
+      <ul class="neighborhood-grid" id="neighborhood-grid">
+        <!-- preenchido via script.js -->
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===== CTA FINAL ===== -->
+  <section class="cta-strip">
+    <div class="cta-inner">
+      <h2>Veja o risco estimado para o seu bairro</h2>
+      <p>O protótipo é público e gratuito — basta selecionar o bairro e o horizonte de previsão.</p>
+      <a class="btn btn-primary btn-large" href="LINK_DO_STREAMLIT" target="_blank" rel="noopener">
+        Acessar protótipo
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Projeto acadêmico — Escola de Engenharia de Lorena (EEL-USP). Protótipo experimental; não substitui comunicados oficiais da Defesa Civil.</p>
+      <p class="footer-meta">© <span id="year"></span> Sistema de Alerta de Alagamentos, Lorena/SP</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
