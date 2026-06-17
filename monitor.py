@@ -1,4 +1,5 @@
 import os
+import json
 import warnings
 from datetime import timedelta
 
@@ -14,11 +15,12 @@ warnings.filterwarnings("ignore")
 
 
 CSV_PATH = "alagamentos_lorena_mvp_rastreavel.csv"
+SUBSCRIBERS_PATH = "subscribers.json"
 OPEN_METEO_URL = "https://api.open-meteo.com/v1/forecast"
 LORENA_LATITUDE = -22.7308
 LORENA_LONGITUDE = -45.1247
 TIMEZONE = "America/Sao_Paulo"
-ALERT_THRESHOLD = 0.0
+ALERT_THRESHOLD = 60.0
 
 
 TIPO_META = {
@@ -161,14 +163,45 @@ def read_float_env(name, default):
         return default
 
 
-def send_telegram_alert(message):
-    token = os.getenv("TELEGRAM_BOT_TOKEN")
-    chat_id = os.getenv("TELEGRAM_CHAT_ID")
+def find_subscribers_file():
+    candidates = [
+        SUBSCRIBERS_PATH,
+        os.path.join(os.path.dirname(__file__), SUBSCRIBERS_PATH),
+    ]
+    for path in candidates:
+        if os.path.exists(path):
+            return path
+    return None
 
-    if not token or not chat_id:
-        print("Telegram nao configurado. Defina TELEGRAM_BOT_TOKEN e TELEGRAM_CHAT_ID.")
-        return False
 
+def load_subscriber_chat_ids():
+    subscribers_path = find_subscribers_file()
+    if subscribers_path:
+        try:
+            with open(subscribers_path, "r", encoding="utf-8") as file:
+                raw_subscribers = json.load(file)
+        except (OSError, json.JSONDecodeError) as exc:
+            print(f"Falha ao ler {subscribers_path}: {exc}. Usando fallback TELEGRAM_CHAT_ID.")
+        else:
+            chat_ids = []
+            for item in raw_subscribers:
+                chat_id = str(item).strip()
+                if chat_id and chat_id not in chat_ids:
+                    chat_ids.append(chat_id)
+            if chat_ids:
+                print(f"Carregados {len(chat_ids)} inscrito(s) de {subscribers_path}.")
+                return chat_ids
+            print(f"{subscribers_path} nao tem inscritos. Usando fallback TELEGRAM_CHAT_ID.")
+
+    fallback_chat_id = os.getenv("TELEGRAM_CHAT_ID")
+    if fallback_chat_id:
+        print("Usando TELEGRAM_CHAT_ID como fallback.")
+        return [fallback_chat_id]
+
+    return []
+
+
+def send_telegram_message(token, chat_id, message):
     url = f"https://api.telegram.org/bot{token}/sendMessage"
     payload = {
         "chat_id": chat_id,
@@ -176,15 +209,35 @@ def send_telegram_alert(message):
         "disable_web_page_preview": True,
     }
 
-    try:
-        response = requests.post(url, json=payload, timeout=12)
-        response.raise_for_status()
-    except requests.RequestException as exc:
-        print(f"Falha ao enviar alerta Telegram: {exc}")
+    response = requests.post(url, json=payload, timeout=12)
+    response.raise_for_status()
+
+
+def send_telegram_alert(message):
+    token = os.getenv("TELEGRAM_BOT_TOKEN")
+    chat_ids = load_subscriber_chat_ids()
+
+    if not token:
+        print("Telegram nao configurado. Defina TELEGRAM_BOT_TOKEN.")
+        return False
+    if not chat_ids:
+        print("Nenhum destinatario Telegram configurado. Crie subscribers.json ou defina TELEGRAM_CHAT_ID.")
         return False
 
-    print("Alerta enviado ao Telegram com sucesso.")
-    return True
+    sent_count = 0
+    try:
+        for chat_id in chat_ids:
+            try:
+                send_telegram_message(token, chat_id, message)
+                sent_count += 1
+                print(f"Alerta enviado ao Telegram para chat_id {chat_id}.")
+            except requests.RequestException as exc:
+                print(f"Falha ao enviar alerta Telegram para chat_id {chat_id}: {exc}")
+    except KeyboardInterrupt:
+        raise
+
+    print(f"Envio Telegram concluido: {sent_count}/{len(chat_ids)} destinatario(s).")
+    return sent_count > 0
 
 
 def prever_riscos(model_bin, model_tipo, le_bairro, le_tipo, dados_meteo):
