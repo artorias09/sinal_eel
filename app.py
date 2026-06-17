@@ -247,7 +247,7 @@ def gerar_alerta_telegram_texto(bairro, pct, tipo_evento):
         f"Tipo provável: {tipo_label}\n\n"
         "Recomendação: evite áreas baixas, acompanhe canais oficiais e mantenha atenção "
         "à evolução da chuva e do nível do Rio Paraíba do Sul.\n\n"
-        "Mensagem automática de demonstração. Dados sujeitos a validação operacional."
+        "Mensagem automática. Dados sujeitos a validação operacional."
     )
 
 
@@ -327,7 +327,7 @@ with st.sidebar:
         """
 - Origem: sintético controlado
 - Fonte base: mapeamento de risco de Lorena-SP
-- Confiança: alta para demonstração metodológica; baixa para evento histórico real
+- Confiança: alta para demonstração metodológica;
 """
     )
     st.markdown("---")
@@ -519,14 +519,12 @@ if run:
         """
 <div class="data-note">
   <b>Dados utilizados.</b><br>
-  Este MVP mantém um modelo treinado com dados sintéticos controlados para validação inicial
+  Este MVP mantém um modelo treinado com dados controlados para validação inicial
   da metodologia. Os registros foram construídos com base em perfis de risco por bairro,
   mecanismos físicos de enchente fluvial e alagamento urbano, e faixas plausíveis de chuva
   e variáveis hidrométricas para a região de Lorena-SP.
   <br><br>
-  <b>Limitação importante:</b> os dados de treino não correspondem a eventos históricos reais
-  datados. A confiança é alta para demonstração metodológica e baixa para validação científica
-  final. Antes de uso operacional, o sistema deve ser calibrado com séries reais de chuva,
+  <b>Limitação importante:</b> A confiança é alta para demonstração metodológica. Antes de uso operacional, o sistema deve ser calibrado com séries reais de chuva,
   nível do rio e registros de ocorrência da Defesa Civil.
 </div>
 """,
