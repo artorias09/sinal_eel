@@ -18,7 +18,7 @@ OPEN_METEO_URL = "https://api.open-meteo.com/v1/forecast"
 LORENA_LATITUDE = -22.7308
 LORENA_LONGITUDE = -45.1247
 TIMEZONE = "America/Sao_Paulo"
-ALERT_THRESHOLD = 60.0
+ALERT_THRESHOLD = 0.0
 
 
 TIPO_META = {
