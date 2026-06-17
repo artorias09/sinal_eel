@@ -251,6 +251,44 @@ def gerar_alerta_telegram_texto(bairro, pct, tipo_evento):
     )
 
 
+def get_telegram_credentials():
+    token = os.getenv("TELEGRAM_BOT_TOKEN")
+    chat_id = os.getenv("TELEGRAM_CHAT_ID")
+
+    if token and chat_id:
+        return token, chat_id
+
+    try:
+        token = token or st.secrets.get("TELEGRAM_BOT_TOKEN")
+        chat_id = chat_id or st.secrets.get("TELEGRAM_CHAT_ID")
+    except Exception:
+        pass
+
+    return token, chat_id
+
+
+def send_telegram_alert(message):
+    token, chat_id = get_telegram_credentials()
+
+    if not token or not chat_id:
+        return False, "Telegram não configurado. Defina TELEGRAM_BOT_TOKEN e TELEGRAM_CHAT_ID."
+
+    url = f"https://api.telegram.org/bot{token}/sendMessage"
+    payload = {
+        "chat_id": chat_id,
+        "text": message,
+        "disable_web_page_preview": True,
+    }
+
+    try:
+        response = requests.post(url, json=payload, timeout=12)
+        response.raise_for_status()
+    except requests.RequestException as exc:
+        return False, f"Falha ao enviar mensagem no Telegram: {exc}"
+
+    return True, "Alerta enviado com sucesso no Telegram."
+
+
 csv_path = find_csv()
 
 st.title("Sistema de alerta de alagamentos - Lorena-SP")
@@ -292,6 +330,19 @@ with st.sidebar:
 - Confiança: alta para demonstração metodológica; baixa para evento histórico real
 """
     )
+    st.markdown("---")
+    st.markdown("**Telegram**")
+    if st.button("Enviar alerta de teste no Telegram", width="stretch"):
+        test_message = (
+            "TESTE - Sistema de alerta de alagamentos - Lorena-SP\n\n"
+            "Mensagem de teste enviada pelo app Streamlit.\n"
+            "MVP acadêmico. Não substitui alertas oficiais da Defesa Civil."
+        )
+        ok, status_message = send_telegram_alert(test_message)
+        if ok:
+            st.success(status_message)
+        else:
+            st.warning(status_message)
 
 st.markdown('<p class="section-title">Modo de entrada</p>', unsafe_allow_html=True)
 modo_entrada = st.radio(
