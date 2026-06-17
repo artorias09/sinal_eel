@@ -304,7 +304,7 @@ def montar_mensagem_alerta(alertas, dados_meteo):
             "",
             "Recomendacao: evitar areas baixas, acompanhar canais oficiais e manter atencao a evolucao da chuva e do Rio Paraiba do Sul.",
             "",
-            "MVP academico. Dados sujeitos a validacao operacional e nao substituem alertas oficiais da Defesa Civil.",
+            "Dados sujeitos a validacao operacional da Defesa Civil.",
         ]
     )
     return "\n".join(linhas)
