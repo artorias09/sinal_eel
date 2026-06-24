@@ -291,7 +291,7 @@ def send_telegram_alert(message):
 
 csv_path = find_csv()
 
-st.title("Sistema de alerta de alagamentos - Lorena-SP")
+st.title("S.I.N.A.L EEL - Lorena-SP")
 st.caption(
     "Demonstração probabilística com modelo sintético-controlado e camada opcional de clima real."
 )
