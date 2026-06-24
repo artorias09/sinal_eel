@@ -16,7 +16,7 @@ warnings.filterwarnings("ignore")
 
 
 st.set_page_config(
-    page_title="Alertas de Alagamentos - Lorena",
+    page_title="S.I.N.A.L EEL",
     layout="centered",
 )
 
